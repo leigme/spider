@@ -20,6 +20,8 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "org.jsoup:jsoup:1.11.2"
+    compile "mysql:mysql-connector-java:5.1.42"
 }
 
 compileKotlin {
