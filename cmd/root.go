@@ -1,15 +1,16 @@
+package cmd
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+
+Copyright © 2023 leig <leigme@gmail.com>
 
 */
-package cmd
-
 import (
 	"os"
-
+  "log"
 	"github.com/spf13/cobra"
+  "github.com/leigme/loki/file"
+  "github.com/leigme/loki/app"
 )
-
 
 
 // rootCmd represents the base command when called without any subcommands
@@ -37,15 +38,10 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.spider.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+  err := file.CreateDir(app.WorkDir())
+  if err != nil {
+    log.Fatal(err)
+  } 
+  rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-
 
