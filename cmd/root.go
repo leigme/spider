@@ -1,17 +1,19 @@
 package cmd
+
 /*
 
 Copyright © 2023 leig <leigme@gmail.com>
 
 */
 import (
-	"os"
-  "log"
+	"github.com/leigme/loki/app"
+	"github.com/leigme/loki/file"
 	"github.com/spf13/cobra"
-  "github.com/leigme/loki/file"
-  "github.com/leigme/loki/app"
+	"golang.org/x/exp/slog"
+	"log"
+	"os"
+	"path/filepath"
 )
-
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -38,10 +40,14 @@ func Execute() {
 }
 
 func init() {
-  err := file.CreateDir(app.WorkDir())
-  if err != nil {
-    log.Fatal(err)
-  } 
-  rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	err := file.CreateDir(app.WorkDir())
+	if err != nil {
+		log.Fatal(err)
+	}
+	f, err := os.Create(filepath.Join(app.WorkDir(), app.Name()+".log"))
+	if err != nil {
+		f = os.Stderr
+	}
+	slog.SetDefault(slog.New(slog.NewTextHandler(f)))
+	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-
