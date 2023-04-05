@@ -7,6 +7,7 @@ import (
 	"github.com/leigme/spider/parse"
 	"github.com/spf13/cobra"
 	"golang.org/x/exp/slog"
+	"io/fs"
 	"os"
 )
 
@@ -24,11 +25,11 @@ func (g get) Execute() loki.Exec {
 		}
 		r := parse.New(args[0]).Parse(args[0])
 		if len(args) == 2 {
-			if out, err := os.Open(args[1]); err == nil {
+			if out, err := os.OpenFile(args[1], os.O_CREATE|os.O_RDWR, fs.ModePerm); err == nil {
 				defer out.Close()
 				w := bufio.NewWriter(out)
 				for k, v := range r {
-					w.WriteString(fmt.Sprintf("%s: %s", k, v))
+					w.WriteString(fmt.Sprintf("%s: %s\n", k, v))
 				}
 				w.Flush()
 			}
